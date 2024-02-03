@@ -15,6 +15,7 @@ import pandas as pd
 import os
 import sys
 
+
 def get_script_dir():
     # Get the directory of the current script
     if getattr(sys, "frozen", False):
@@ -53,11 +54,14 @@ def split_at_first_non_capitalized_word(input_string):
 
 def get_goals(text):
     # Define the regex pattern
-    pattern = re.compile(r"GOAL(.*?)MEANS", re.DOTALL)
+    # pattern = re.compile(r"GOAL(.*?)MEANS", re.DOTALL)
+    # pattern = re.compile(r"GOAL(.*?)(MEANS|\d{4}-\d{2}-\d{2})", re.DOTALL)
+    pattern = re.compile(r"GOAL(.*?)(?:MEANS|\d{4}-\d{2}-\d{2})", re.DOTALL)
 
     # Find all matches in the input string
     matches = pattern.findall(text)
-
+    # print(matches)
+    # assert False
     matches = [match.replace("\t", " ") for match in matches]
 
     matches = [match.replace("\n", " ") for match in matches]
@@ -194,7 +198,8 @@ def main():
         for page in reader.pages:
             text += page.extract_text() + "\n"
         student_name = get_name(text)
-        output_filename = f"{script_directory}/outputs/Report_Term2_{student_name.replace(', ', '_').replace(' ', '_')}.pdf"
+
+        output_filename = f"{script_directory}/outputs/Report_Term3_{student_name.replace(', ', '_').replace(' ', '_')}.pdf"
         competencies_goals_dict = get_goals(text)
         create_combined_pdf(
             output_filename, title, student_name, competencies_goals_dict
