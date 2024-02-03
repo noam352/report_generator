@@ -54,9 +54,9 @@ def split_at_first_non_capitalized_word(input_string):
 
 def get_goals(text):
     # Define the regex pattern
-    # pattern = re.compile(r"GOAL(.*?)MEANS", re.DOTALL)
+    pattern = re.compile(r"GOAL(.*?)MEANS", re.DOTALL)
     # pattern = re.compile(r"GOAL(.*?)(MEANS|\d{4}-\d{2}-\d{2})", re.DOTALL)
-    pattern = re.compile(r"GOAL(.*?)(?:MEANS|\d{4}-\d{2}-\d{2})", re.DOTALL)
+    # pattern = re.compile(r"GOAL(.*?)(?:MEANS|\d{4}-\d{2}-\d{2})", re.DOTALL)
 
     # Find all matches in the input string
     matches = pattern.findall(text)
