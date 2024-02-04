@@ -71,7 +71,11 @@ def get_goals(text):
     goal_dict = {}
     for match in matches:
         key, value = split_at_first_non_capitalized_word(match)
-        goal_dict[key.title()] = value
+        if key.title() in goal_dict:
+            ### will break if there are 3 of the same goal
+            goal_dict[key.title() + "2"] = value
+        else:
+            goal_dict[key.title()] = value
     return goal_dict
 
 
