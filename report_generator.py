@@ -54,13 +54,20 @@ def split_at_first_non_capitalized_word(input_string):
 
 def get_goals(text):
     # Define the regex pattern
-    pattern = re.compile(r"GOAL(.*?)MEANS", re.DOTALL)
+    # pattern = re.compile(r"GOAL(.*?)MEANS", re.DOTALL)
+    pattern = re.compile(r"GOAL(.*?)(MEANS|Additional\tcomments)", re.DOTALL)
+
     # pattern = re.compile(r"GOAL(.*?)(MEANS|\d{4}-\d{2}-\d{2})", re.DOTALL)
     # pattern = re.compile(r"GOAL(.*?)(?:MEANS|\d{4}-\d{2}-\d{2})", re.DOTALL)
 
     # Find all matches in the input string
     matches = pattern.findall(text)
+    matches = [match[0].replace("\t", " ") for match in matches]
+
     # print(matches)
+    # for match in matches:
+    #     print(f"{match}\n\n\n\n\n\n")
+    # print([f"{match}\n" for match in matches])
     # assert False
     matches = [match.replace("\t", " ") for match in matches]
 
@@ -89,7 +96,7 @@ def get_name(text):
 def generate_date_ranges(start_month, start_year, end_month, end_year):
     start_date = pd.to_datetime(f"{start_month}/01/{start_year}")
     end_date = pd.to_datetime(f"{end_month}/01/{end_year}")
-
+    # print(start_date, end_date)
     date_ranges = []
 
     current_date = start_date
@@ -175,10 +182,10 @@ def create_combined_pdf(output_filename, title, name, competencies_goals_dict):
     # Build the combined PDF content
     combined_content = []
 
-    start_month = 2  # February
+    start_month = 10  # February
     start_year = 2024
-    end_month = 6  # June
-    end_year = 2024
+    end_month = 2  # June
+    end_year = 2025
 
     for competency, goal in competencies_goals_dict.items():
         date_ranges = generate_date_ranges(start_month, start_year, end_month, end_year)
@@ -193,7 +200,7 @@ def create_combined_pdf(output_filename, title, name, competencies_goals_dict):
 def main():
     script_directory = get_script_dir()
     file_names = get_file_names(script_directory)
-    title = "IEP Data Collection - Term 2"
+    title = "IEP Data Collection - Term 1"
     file_names = [f"{script_directory}/inputs/{file_name}" for file_name in file_names]
 
     for file_name in file_names:
@@ -203,8 +210,9 @@ def main():
             text += page.extract_text() + "\n"
         student_name = get_name(text)
 
-        output_filename = f"{script_directory}/outputs/Report_Term3_{student_name.replace(', ', '_').replace(' ', '_')}.pdf"
+        output_filename = f"{script_directory}/outputs/Report_Term1_{student_name.replace(', ', '_').replace(' ', '_')}.pdf"
         competencies_goals_dict = get_goals(text)
+        # print(competencies_goals_dict)
         create_combined_pdf(
             output_filename, title, student_name, competencies_goals_dict
         )
